@@ -1,0 +1,14 @@
+# Python virtual environment — never commit, recreate from requirements.txt
+venv/
+
+# Python cache files — auto-generated, not source code
+__pycache__/
+*.pyc
+
+# Editor / OS files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Streamlit secrets (if we ever add any)
+.streamlit/secrets.toml
