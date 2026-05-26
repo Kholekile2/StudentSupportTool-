@@ -1,0 +1,52 @@
+learner_id,age_band,province,area_type,device_access,internet_access,digital_confidence,digital_confidence_band,programming_confidence,programming_confidence_band,ai_confidence,ai_confidence_band,employment_status,support_need,attendance_risk
+L001,18-21,KwaZulu-Natal,Urban,Own laptop,Stable,4,High,3,Medium,3,Medium,Unemployed,Mentoring,Medium
+L002,22-25,KwaZulu-Natal,Township,Phone + shared laptop,Limited,3,Medium,2,Low,4,High,,Mentoring,Low
+L003,26-30,Gauteng,Urban,Phone + shared laptop,Limited,3,Medium,3,Medium,3,Medium,Unemployed,Data bundle,Low
+L004,22-25,Gauteng,Urban,Phone + shared laptop,Unstable,3,Medium,4,High,3,Medium,Full-time,Mentoring,Low
+L005,26-30,Western Cape,Urban,Phone + shared laptop,Stable,3,Medium,1,Low,3,Medium,Unemployed,Mentoring,Medium
+L006,22-25,Western Cape,Rural,Phone + shared laptop,Limited,,,,,2,Low,Part-time,Data bundle,Medium
+L007,31+,Gauteng,Urban,Phone + shared laptop,Stable,1,Low,2,Low,1,Low,Full-time,Evening sessions,Medium
+L008,26-30,Gauteng,Township,Phone only,Stable,7,High,1,Low,1,Low,Unemployed,Device loan,High
+L009,22-25,KwaZulu-Natal,Rural,Phone only,Stable,1,Low,1,Low,1,Low,Unemployed,Study group,Medium
+L010,18-21,Western Cape,Urban,Own laptop,Stable,4,High,5,High,3,Medium,Unemployed,Device loan,Low
+L011,22-25,Gauteng,Township,Own laptop,Stable,4,High,2,Low,4,High,Unemployed,Mentoring,Low
+L012,18-21,Mpumalanga,Rural,Phone + shared laptop,Stable,3,Medium,3,Medium,,,Unemployed,Device loan,Low
+L013,22-25,Western Cape,Urban,Phone + shared laptop,Limited,1,Low,1,Low,2,Low,Studying,None right now,Low
+L014,22-25,KwaZulu-Natal,Township,Phone only,Unstable,1,Low,,,1,Low,Unemployed,Device loan,High
+L015,31+,KwaZulu-Natal,Urban,Phone only,Unstable,2,Low,1,Low,3,Medium,Full-time,Mentoring,High
+L016,22-25,KwaZulu-Natal,Township,Phone only,Limited,4,High,3,Medium,3,Medium,Full-time,Evening sessions,High
+L017,18-21,Western Cape,Urban,Own laptop,Unstable,5,High,,,5,High,Unemployed,Mentoring,High
+L018,22-25,Eastern Cape,Urban,Own laptop,Stable,5,High,4,High,4,High,Unemployed,,Medium
+L019,22-25,Eastern Cape,Township,Own laptop,Stable,,,3,Medium,2,Low,Studying,Data bundle,Low
+L020,22-25,Gauteng,Township,Phone only,Stable,5,High,5,High,4,High,Full-time,Mentoring,Medium
+L021,22-25,North West,Rural,Phone only,Limited,1,Low,1,Low,1,Low,Unemployed,Device loan,High
+L022,22-25,Gauteng,Township,Own laptop,Unstable,5,High,3,Medium,3,Medium,,Data bundle,Low
+L023,18-21,Western Cape,Urban,Phone + shared laptop,Limited,2,Low,2,Low,1,Low,Unemployed,Study group,Low
+L024,18-21,Gautng,Township,Phone + shared laptop,Unstable,5,High,4,High,5,High,Full-time,Data bundle,Medium
+L025,18-21,Limpopo,Rural,Phone only,Limited,2,Low,1,Low,1,Low,Studying,Data bundle,High
+L026,,Eastern Cape,Rural,Phone + shared laptop,Unstable,4,High,4,High,3,Medium,Studying,None right now,High
+L027,26-30,Gauteng,Township,Own laptop,Limited,4,High,4,High,3,Medium,Full-time,Data bundle,Low
+L028,26-30,Gauteng,Township,Own laptop,Stable,2,Low,3,Medium,1,Low,Studying,Mental health support,Low
+L029,22-25,Western Cape,Township,Phone only,Limited,,,1,Low,1,Low,Unemployed,Data bundle,Low
+L030,22-25,Mpumalanga,Township,Phone only,Unstable,2,Low,1,Low,1,Low,Unemployed,Device loan,Medium
+L031,18-21,Limpopo,Township,Phone only,Limited,2,Low,1,Low,1,Low,Full-time,Data bundle,Low
+L032,18-21,Gauteng,Township,Phone + shared laptop,Limited,3,Medium,,,,,Unemployed,,Medium
+L033,18-21,Gauteng,Township,Own laptop,Stable,4,High,4,High,2,Low,Unemployed,Study group,Low
+L034,18-21,Gauteng,Township,Phone only,Limited,,,1,Low,3,Medium,Part-time,Device loan,Medium
+L035,18-21,Eastern Cape,Rural,Phone + shared laptop,Limited,4,High,1,Low,3,Medium,Unemployed,Data bundle,Low
+L036,31+,KwaZulu-Natal,Urban,Phone + shared laptop,Stable,2,Low,1,Low,1,Low,,Device loan,Low
+L037,22-25,Mpumalanga,Rural,Phone only,Unstable,1,Low,1,Low,1,Low,Unemployed,,Medium
+L038,22-25,KwaZulu-Natal,Township,Phone only,Unstable,1,Low,1,Low,1,Low,Studying,Data bundle,Medium
+L039,26-30,Western Cape,Township,Own laptop,Stable,5,High,5,High,2,Low,Unemployed,Study group,Low
+L040,18-21,Western Cape,Township,Phone only,Unstable,3,Medium,2,Low,3,Medium,Unemployed,Device loan,High
+L041,18-21,KwaZulu-Natal,Rural,Phone only,Unstable,2,Low,2,Low,2,Low,Unemployed,None right now,High
+L042,,North West,Township,Own laptop,Stable,3,Medium,2,Low,1,Low,Full-time,Study group,Low
+L043,22-25,Gauteng,Urban,Phone + shared laptop,Limited,4,High,4,High,,,Unemployed,Data bundle,High
+L044,18-21,Western Cape,Township,Phone + shared laptop,Limited,3,Medium,1,Low,4,High,Unemployed,Data bundle,Low
+L045,22-25,Western Cape,Township,Phone only,Stable,2,Low,,,,,Part-time,Device loan,High
+L046,18-21,Limpopo,Rural,Phone only,Stable,2,Low,1,Low,1,Low,Unemployed,Device loan,Medium
+L047,26-30,Free State,Rural,Phone only,Limited,3,Medium,2,Low,,,Unemployed,Data bundle,Medium
+L048,22-25,Limpopo,Township,Phone + shared laptop,Stable,3,Medium,3,Medium,1,Low,Unemployed,Data bundle,Medium
+L049,22-25,Western Cape,Urban,Own laptop,Stable,,,5,High,,,Unemployed,Evening sessions,Low
+L050,18-21,Eastern Cape,Rural,Phone only,Limited,1,Low,1,Low,1,Low,Full-time,Device loan,Medium
+L013,22-25,Western Cape,Urban,Phone + shared laptop,Limited,1,Low,1,Low,2,Low,Studying,Mentoring,Medium
