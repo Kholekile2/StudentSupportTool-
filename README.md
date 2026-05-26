@@ -181,7 +181,7 @@ The full integrated report is available in the project submission.
 
 ## Author
 
-Kholekile — Future-Innovation Lab intern, Cohort 5, 2026.
+Kholekile Mpengesi
 
 ---
 
