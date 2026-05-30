@@ -329,7 +329,7 @@ provinces_reached = df["province"][df["province"].isin(VALID_PROVINCES)].nunique
 def _kpi_tile(label, value, sub, bg_color, text_color="#FFFFFF"):
     st.markdown(
         f"""
-        <div style="background-color:{bg_color};padding:18px;border-radius:10px;text-align:center;">
+        <div style="background-color:{bg_color};padding:18px;border-radius:10px;text-align:center;margin-bottom:20px;">
             <div style="color:{text_color};font-size:14px;opacity:0.85;">{label}</div>
             <div style="color:{text_color};font-size:30px;font-weight:700;margin:4px 0;">{value}</div>
             <div style="color:{text_color};font-size:12px;opacity:0.85;">{sub}</div>
