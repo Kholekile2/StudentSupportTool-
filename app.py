@@ -9,9 +9,9 @@ What this page does:
   - Shows headline KPIs about who the programme is serving
   - Lets staff filter by province, area type, and risk band (slicers)
   - Renders six dashboard charts, organised in a single-screen grid
-  - Tells two stories at once:
-      1. WHO IS STRUGGLING among learners we have
-      2. WHO WE ARE NOT REACHING — communities absent from the data
+  -- Tells the story of enrolled learners primarily — who they are, where
+    confidence and risk concentrate, and what they themselves are asking
+    for. Surfaces reach gaps as a secondary signal.
 """
 
 import streamlit as st
@@ -168,8 +168,9 @@ st.caption(f"👤 Session: **{st.session_state['user_identifier']}**")
 st.title("🎓 Student Support Insights Tool")
 st.caption(
     "Aggregate view — no individual learners are named here. "
-    "This dashboard answers two questions: who is struggling among learners we serve, "
-    "and which communities are we not reaching?"
+    "This dashboard helps the programme understand its enrolled learners — "
+    "who they are, where confidence and risk concentrate, and what they themselves "
+    "are asking for. As a secondary signal, gaps in reach are also visible."
 )
 
 
