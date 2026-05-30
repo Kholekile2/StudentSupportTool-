@@ -28,6 +28,141 @@ st.set_page_config(
     layout="wide",
 )
 
+# ====== ETHICS & AGREEMENT GATE ======
+# This gate enforces consent architecturally — until the user agrees, no data
+# renders. The agreement is per-session and binding: the user identifies
+# themselves and acknowledges accountability for misuse. Per-session means the
+# user re-acknowledges each time the app is opened — "you agreed once forever"
+# is consent theatre, not consent.
+if "user_agreed" not in st.session_state:
+    st.session_state["user_agreed"] = False
+if "user_identifier" not in st.session_state:
+    st.session_state["user_identifier"] = ""
+
+if not st.session_state["user_agreed"]:
+    st.title("🎓 Student Support Insights Tool")
+    st.subheader("Before you continue — Responsible Use Agreement")
+    st.markdown(
+        """
+        This tool is being used in a prototype with synthetic data. In real
+        deployment, it will work with **real personal information about real
+        learners** — protected by the Protection of Personal Information Act
+        (POPIA, South Africa).
+
+        Before continuing, please read the following carefully. You are not
+        clicking through a banner — you are entering into a binding
+        responsible-use commitment with the programme.
+        """
+    )
+
+    st.markdown("#### What you are agreeing to")
+    st.markdown(
+        """
+        1. **The data is real and protected.** Even where the prototype uses
+           synthetic data, the production system will hold real personal
+           information about real learners. I will treat all data accessed
+           through this tool as personal information, regardless of whether
+           it is currently synthetic or real.
+
+        2. **The data may not be misused.** I will not copy, share, screenshot,
+           export, or otherwise remove learner data for any purpose outside
+           the support of the learners themselves. The export feature is for
+           legitimate programme purposes only.
+
+        3. **Misuse has consequences.** I understand that misuse of learner
+           data — including sharing it outside authorised channels, using it
+           to disadvantage a learner, or accessing it without a legitimate
+           need — may constitute a breach of POPIA, may result in disciplinary
+           action by the programme, and may carry legal consequences.
+
+        4. **I am identifying myself.** By entering my name and role below,
+           I am identifying myself as the person accountable for what is done
+           with this tool in this session.
+
+        5. **The tool is a prompt, not a decision-maker.** Every signal it
+           surfaces is a prompt to a human decision. I will treat it as such.
+           I will not use the tool to disadvantage, deprioritise, or remove
+           any learner from the programme on the basis of a flag alone.
+
+        6. **I will hear the learner first.** Where the learner has stated
+           a need, I will hear that need before any signal the tool inferred
+           about them.
+
+        7. **I will record every action.** A flag without a recorded action
+           is a learner forgotten. Every support action I take (or explicitly
+           do not take, with a reason) will be logged on the learner's
+           detail page.
+
+        8. **I understand the spirit of the tool.** This tool is designed so
+           that identifying a learner's need triggers **support**, not
+           **judgement**. I commit to using it in that spirit.
+        """
+    )
+
+    st.divider()
+    st.markdown("#### Please identify yourself")
+    st.caption(
+        "Your name and role are logged with this session. This is the "
+        "accountability layer — anonymity is not appropriate when working "
+        "with personal data."
+    )
+
+    name_col, role_col = st.columns(2)
+    with name_col:
+        user_name = st.text_input(
+            "Your full name",
+            key="agreement_name",
+            placeholder="e.g. Thandi Mokoena",
+        )
+    with role_col:
+        user_role = st.text_input(
+            "Your role",
+            key="agreement_role",
+            placeholder="e.g. Support Coordinator",
+        )
+
+    confirm = st.checkbox(
+        "I have read and understood every clause above, and I agree to be "
+        "bound by them for the duration of this session.",
+        key="agreement_checkbox",
+    )
+
+    st.divider()
+    agree_col1, agree_col2 = st.columns([1, 4])
+    with agree_col1:
+        ready_to_agree = bool(user_name.strip()) and bool(user_role.strip()) and confirm
+        if st.button(
+            "I agree — continue",
+            type="primary",
+            use_container_width=True,
+            disabled=not ready_to_agree,
+        ):
+            st.session_state["user_agreed"] = True
+            st.session_state["user_identifier"] = f"{user_name.strip()} ({user_role.strip()})"
+            st.rerun()
+    with agree_col2:
+        if not ready_to_agree:
+            st.caption(
+                "⚠️ You must enter your name, your role, and tick the "
+                "confirmation box before you can continue."
+            )
+        else:
+            st.caption("Click the button to enter the tool.")
+
+    # Allow people to read the full ethics statement without agreeing.
+    st.divider()
+    st.caption(
+        "If you would like to read the full ethics statement before agreeing, "
+        "open the **About** page in the sidebar — it does not require agreement."
+    )
+
+    st.stop()
+
+# Once agreed: show a small banner identifying the current session user.
+# This is the accountability surface — staff see who is "signed in" at all
+# times, so the user is reminded their actions are attributed to them.
+st.caption(f"👤 Session: **{st.session_state['user_identifier']}**")
+
 
 # ====== HEADER ======
 st.title("🎓 Student Support Insights Tool")
@@ -211,6 +346,47 @@ with kpi3:
     _kpi_tile("Phone-only access", f"{phone_only_pct:.0f}%", f"{phone_only} learners", "#E67E22")
 with kpi4:
     _kpi_tile("Provinces reached", f"{provinces_reached} / 9", "out of 9 SA provinces", "#27AE60")
+
+
+
+# ====== EXPORT — download the data currently in view ======
+# Exports the filtered subset (respects slicer state). By default we exclude
+# the deliberate dirt — out-of-range scores and duplicate rows — so that
+# downstream users of the export aren't misled. An opt-in checkbox lets a
+# data steward export the raw view for auditing.
+with st.expander("📥 Export this view"):
+    raw_export = st.checkbox(
+        "Include rows with data quality issues (out-of-range scores, duplicates)",
+        value=False,
+        help=(
+            "Off by default. Turn on only if you are auditing data quality; "
+            "the rows included are flagged in the data quality panel above."
+        ),
+    )
+
+    if raw_export:
+        df_to_export = df.copy()
+    else:
+        # Exclude rows flagged in the validation report.
+        bad_ids = set(report["duplicate_ids"])
+        bad_ids.update(issue["learner_id"] for issue in report["out_of_range_confidence"])
+        bad_ids.update(issue["learner_id"] for issue in report["invalid_province"])
+        df_to_export = df[~df["learner_id"].isin(bad_ids)].copy()
+
+    csv_bytes = df_to_export.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label=f"📥 Download CSV ({len(df_to_export)} rows)",
+        data=csv_bytes,
+        file_name="learner_data_export.csv",
+        mime="text/csv",
+        use_container_width=False,
+    )
+    st.caption(
+        "The export contains exactly the rows currently visible after filtering. "
+        "Treat exported data with the same care as the source — it is still "
+        "personal information."
+    )
+
 
 
 # ====== DATA QUALITY (compact) ======
