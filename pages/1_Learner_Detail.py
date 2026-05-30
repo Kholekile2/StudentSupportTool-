@@ -26,6 +26,28 @@ st.set_page_config(
     layout="wide",
 )
 
+# ====== AGREEMENT GUARD ======
+# This page handles individual, named learners — the most ethically sensitive
+# view in the tool. Refuse to render until the user has agreed on the
+# Dashboard. Streamlit shares session state across pages, so the check is
+# simple: if they agreed elsewhere, they're agreed here too.
+if not st.session_state.get("user_agreed", False):
+    st.title("👤 Learner Detail")
+    st.warning(
+        "⚠️ This page handles personal information about individual learners. "
+        "Please open the **app** (Dashboard) page first and agree to the "
+        "Responsible Use Agreement before viewing any learner."
+    )
+    st.info(
+        "If you have not yet read the agreement, the **About** page in the "
+        "sidebar explains the tool's ethics commitments — no agreement is "
+        "required to read it."
+    )
+    st.stop()
+
+# Show the session-identity banner so the user knows they're attributed.
+st.caption(f"👤 Session: **{st.session_state['user_identifier']}**")
+
 st.title("👤 Learner Detail")
 st.caption(
     "Individual view — one named learner at a time. "
