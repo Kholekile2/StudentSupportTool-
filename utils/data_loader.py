@@ -1,11 +1,8 @@
 """
 data_loader.py
 ---------------
-Single point of entry for all data going into the app.
-Every page imports load_data() from here — no page reads the CSV directly.
-
-Why this matters: validation can never be accidentally skipped. The data
-dictionary defined what "valid" means; this file enforces it.
+Single entry point for data validation. Every page imports load_data() from here.
+Enforces the data dictionary rules — validation is never accidentally skipped.
 """
 
 import pandas as pd
@@ -46,17 +43,12 @@ def confidence_band(score):
 
 
 def load_data(csv_source="data/learners.csv"):
-    """Load the learners CSV and return a cleaned DataFrame + a validation report.
-
-    csv_source can be either a file path (string) OR a file-like object
-    (e.g. from Streamlit's st.file_uploader). The function handles both.
-
-    Returns a tuple: (df, report)
-      df:     pandas DataFrame, with invalid rows still present but flagged
-      report: dict describing what was found — for the dashboard to display honestly
-
-    Design choice: we DON'T silently drop bad rows. We flag them, show the user
-    what we found, and let them decide. Silently dropping data is itself a bias.
+    """Load a CSV and return (dataframe, validation_report).
+    
+    csv_source can be a file path (string) or file-like object (e.g. from upload).
+    Returns tuple: (df with all rows, report dict with validation issues found).
+    
+    Design: bad rows are flagged, not silently dropped. Users decide what to do.
     """
     # If csv_source is a string, treat it as a file path. Otherwise assume it's
     # a file-like object (e.g. from a Streamlit upload).

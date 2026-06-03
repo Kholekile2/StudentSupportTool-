@@ -31,65 +31,28 @@ st.subheader("What this tool is for")
 st.markdown(
     """
     The Student Support Insights Tool helps programme staff identify learners
-    who may benefit from support, using data that learners themselves provided
-    at intake. It answers two questions:
+    who might benefit from support, based on information they shared at intake.
+    It answers two questions:
 
-    - **Who is struggling among the learners we already serve?** — so support
-      can be offered early, before disengagement.
-    - **Which communities are we not reaching?** — so recruitment can extend
-      the opportunity to under-represented areas.
+    - **Who is struggling?** — so support can start early, before they disengage.
+    - **Who are we not reaching?** — so recruitment can extend to underrepresented areas.
 
-    The tool's purpose is to make support *flow toward* learners. It is not a
-    risk-scoring system that ranks learners for prioritisation. A flag on this
-    tool is a prompt to a human, not a verdict on a person.
+    Think of it as a **prompt to human judgment**, not an automated verdict. A flag on this
+    tool means "look into this", not "this is definite".
     """
 )
 
 
-# ====== WHAT THIS TOOL WILL NOT DO ======
-st.subheader("What this tool will not do")
+# ====== GUARDRAILS ======
+st.subheader("What stays human")
 st.markdown(
     """
-    These are firm boundaries, enforced in the design and the code:
+    Some decisions always need a person. This tool will never:
 
-    - **It will not make decisions about a learner.** Every flag, score, or
-      suggestion routes to a human (the support coordinator) who decides what
-      to do. The tool informs; humans decide.
-    - **It will not display a risk indicator without a paired support action.**
-      Every signal on the Learner Detail page comes with a concrete next step.
-      No naked numbers, no orphan flags.
-    - **It will not single out individuals on the dashboard.** Only aggregates
-      appear on the dashboard view. Individual learners are visible only on
-      their dedicated detail page, intentionally separated.
-    - **It will not silently drop or "clean" bad data.** Data quality issues
-      (out-of-range scores, duplicate IDs, invalid entries) are surfaced
-      explicitly, so a human can verify before acting on them.
-    - **It will not infer beyond what the rules define.** The recommendation
-      logic is rule-based and fully readable in `utils/recommendations.py`.
-      There is no machine learning model in this tool — by design, so every
-      suggestion is auditable.
-    """
-)
-
-
-# ====== WHAT MUST NOT BE AUTOMATED ======
-st.subheader("What must not be automated")
-st.markdown(
-    """
-    The brief explicitly asks where human review is required. These actions
-    must never be taken by the tool alone:
-
-    - **Deciding whether a learner stays in or leaves the programme.** The tool
-      does not produce dismissal or retention recommendations.
-    - **Allocating limited resources between learners.** The tool can highlight
-      where support is needed, but the prioritisation between learners must be
-      made by a human who can hold context the tool cannot see.
-    - **Communicating with the learner about a flag.** Any conversation about a
-      learner's support need is a human-to-human conversation, never an
-      automated message generated from a flag.
-    - **Acting on the "Unsure" response.** When a learner says they are unsure
-      what they need, that is a request for a conversation — not a data point
-      for the tool to infer from.
+    - **Decide a learner's place in the programme.** No dismissal or retention calls from automation.
+    - **Rank learners against each other for resources.** The tool can say where support might help; humans decide who needs it most.
+    - **Message a learner directly.** Any conversation with a learner happens person-to-person, not from an automated system.
+    - **Act on an I'm unsure response.** When someone says they don't know what they need, that's a conversation starter, not data to be interpreted.
     """
 )
 
@@ -114,54 +77,18 @@ st.markdown(
 )
 
 
-# ====== DATA HANDLING & POPIA ======
-st.subheader("Data handling and POPIA")
+# ====== DATA & PRIVACY ======
+st.subheader("Data and privacy")
 st.markdown(
     """
-    The dataset used in this prototype is **fully synthetic** — no real
-    learners are represented. In production, learner data would be personal
-    information governed by the **Protection of Personal Information Act
-    (POPIA, South Africa)**.
+    **This prototype uses fully synthetic data** — no real learners.
+    When real data is used, it is governed by POPIA (Protection of Personal Information Act).
 
-    The tool's design respects POPIA in the following concrete ways:
-
-    - **Minimal collection.** Only the columns defined in the data dictionary
-      are used. The dictionary is the consent boundary — any new column would
-      require explicit justification and re-consent.
-    - **Anonymous identifiers.** Learners are referenced by a system-generated
-      ID, not by name. The ID lets support be tracked over time without
-      requiring the system to know who the person is.
-    - **Aggregate by default.** Dashboard views never name individuals.
-      Individual views are on a separate page, accessed deliberately.
-    - **Honest data quality reporting.** A learner has a right to know how
-      their data is being used. The data quality panel makes any issues with
-      their specific record visible to staff before any action is taken.
-    """
-)
-
-
-# ====== LIMITATIONS ======
-st.subheader("Limitations of this prototype")
-st.markdown(
-    """
-    Honest reporting of what the prototype does *not* yet do:
-
-    - **Schema-bound.** The validation rules generalise across new datasets
-      that match our data dictionary's schema — but a dataset with different
-      column names, different value spellings (e.g. "KZN" vs "KwaZulu-Natal"),
-      or new categories of data quality issues would require updates to the
-      dictionary and the validator.
-    - **In-session memory only.** Recorded actions persist only for the
-      current browser session. A production deployment would persist them to
-      a database.
-    - **Small sample sizes are noisy.** Some charts use bands of n<5 or n<10
-      learners. Sample-size honesty is built into the visualisations (lighter
-      bars, caption warnings), but no chart on this tool should be read as
-      a verdict where the sample is small.
-    - **Synthetic data only.** The patterns in the prototype's dataset reflect
-      realistic SA learner demographics by design, but they are not real
-      learners. Production deployment requires real intake data, real consent,
-      and real legal review.
+    We respect privacy by:
+    - Using only data that learners consented to share at intake.
+    - Identifying learners by ID, not name.
+    - Never showing individual names on the dashboard — only grouped trends.
+    - Surfacing data quality issues (wrong entries, odd values) so staff can verify them before using them.
     """
 )
 

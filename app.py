@@ -44,67 +44,33 @@ if not st.session_state["user_agreed"]:
     st.subheader("Before you continue — Responsible Use Agreement")
     st.markdown(
         """
-        This tool is being used in a prototype with synthetic data. In real
-        deployment, it will work with **real personal information about real
-        learners** — protected by the Protection of Personal Information Act
-        (POPIA, South Africa).
+        This tool works with learner information. When deployed in production, 
+        it will be governed by POPIA (Protection of Personal Information Act, South Africa).
 
-        Before continuing, please read the following carefully. You are not
-        clicking through a banner — you are entering into a binding
-        responsible-use commitment with the programme.
+        Before you access the tool, identify yourself and commit to three 
+        responsibilities below.
         """
     )
 
-    st.markdown("#### What you are agreeing to")
+    st.markdown("#### What you're committing to")
     st.markdown(
         """
-        1. **The data is real and protected.** Even where the prototype uses
-           synthetic data, the production system will hold real personal
-           information about real learners. I will treat all data accessed
-           through this tool as personal information, regardless of whether
-           it is currently synthetic or real.
+        1. **I am identified.** My name and role are logged. Every action I take 
+           in this session is attributed to me.
 
-        2. **The data may not be misused.** I will not copy, share, screenshot,
-           export, or otherwise remove learner data for any purpose outside
-           the support of the learners themselves. The export feature is for
-           legitimate programme purposes only.
+        2. **The data is protected.** I will not copy, share, screenshot, or 
+           export learner information for any purpose outside their direct support.
 
-        3. **Misuse has consequences.** I understand that misuse of learner
-           data — including sharing it outside authorised channels, using it
-           to disadvantage a learner, or accessing it without a legitimate
-           need — may constitute a breach of POPIA, may result in disciplinary
-           action by the programme, and may carry legal consequences.
-
-        4. **I am identifying myself.** By entering my name and role below,
-           I am identifying myself as the person accountable for what is done
-           with this tool in this session.
-
-        5. **The tool is a prompt, not a decision-maker.** Every signal it
-           surfaces is a prompt to a human decision. I will treat it as such.
-           I will not use the tool to disadvantage, deprioritise, or remove
-           any learner from the programme on the basis of a flag alone.
-
-        6. **I will hear the learner first.** Where the learner has stated
-           a need, I will hear that need before any signal the tool inferred
-           about them.
-
-        7. **I will record every action.** A flag without a recorded action
-           is a learner forgotten. Every support action I take (or explicitly
-           do not take, with a reason) will be logged on the learner's
-           detail page.
-
-        8. **I understand the spirit of the tool.** This tool is designed so
-           that identifying a learner's need triggers **support**, not
-           **judgement**. I commit to using it in that spirit.
+        3. **Misuse has consequences.** I understand that breaching these 
+           commitments may result in disciplinary action and legal consequences 
+           under POPIA.
         """
     )
 
     st.divider()
-    st.markdown("#### Please identify yourself")
+    st.markdown("#### Who are you?")
     st.caption(
-        "Your name and role are logged with this session. This is the "
-        "accountability layer — anonymity is not appropriate when working "
-        "with personal data."
+        "Your name and role are logged with this session — every action is traced back to you."
     )
 
     name_col, role_col = st.columns(2)
@@ -122,8 +88,7 @@ if not st.session_state["user_agreed"]:
         )
 
     confirm = st.checkbox(
-        "I have read and understood every clause above, and I agree to be "
-        "bound by them for the duration of this session.",
+        "I agree to these commitments for this session.",
         key="agreement_checkbox",
     )
 
@@ -168,9 +133,7 @@ st.caption(f"👤 Session: **{st.session_state['user_identifier']}**")
 st.title("🎓 Student Support Insights Tool")
 st.caption(
     "Aggregate view — no individual learners are named here. "
-    "This dashboard helps the programme understand its enrolled learners — "
-    "who they are, where confidence and risk concentrate, and what they themselves "
-    "are asking for. As a secondary signal, gaps in reach are also visible."
+    "Filters below let you slice by learner profile, resources, and confidence."
 )
 
 
@@ -254,9 +217,7 @@ with st.sidebar:
     st.divider()
     st.markdown("### ℹ️ Privacy")
     st.caption(
-        "All data shown is synthetic. In production this tool would be governed "
-        "by POPIA. The tool never displays a risk indicator without a suggested "
-        "support action — individual recommendations live on the Learner Detail page."
+        "All data shown is synthetic. Individual learner recommendations are on the Learner Detail page."
     )
 
 
