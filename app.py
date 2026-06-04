@@ -310,6 +310,155 @@ with kpi4:
     _kpi_tile("Provinces reached", f"{provinces_reached} / 9", "out of 9 SA provinces", "#27AE60")
 
 
+# ====== INSIGHTS & RECOMMENDATIONS FUNCTION ======
+def render_insights_and_recommendations_panels(df: pd.DataFrame) -> None:
+    """
+    Render two side-by-side panels at the bottom of the Dashboard:
+    1. Key insights — live-computed observations about the current view.
+    2. Recommendations for programme staff — concrete actions tied to those insights.
+
+    Reads from the filtered DataFrame (after sidebar filters applied),
+    so insights update whenever the user changes a filter.
+    """
+
+    # ----- guard: don't render if the filtered set is empty -----
+    if df is None or len(df) == 0:
+        return
+
+    n_total = len(df)
+
+    # ----- compute the numbers we will quote -----
+    # All counts use .fillna("") to avoid NaN-related miscounts.
+    risk_col = df.get("attendance_risk", pd.Series(dtype=str)).fillna("")
+    n_high_risk = int((risk_col == "High").sum())
+    n_medium_risk = int((risk_col == "Medium").sum())
+    pct_high = round(100 * n_high_risk / n_total) if n_total else 0
+    pct_med_or_high = round(100 * (n_high_risk + n_medium_risk) / n_total) if n_total else 0
+
+    device_col = df.get("device_access", pd.Series(dtype=str)).fillna("")
+    n_phone_only = int((device_col == "Phone only").sum())
+    pct_phone_only = round(100 * n_phone_only / n_total) if n_total else 0
+
+    internet_col = df.get("internet_access", pd.Series(dtype=str)).fillna("")
+    n_limited_unstable = int(internet_col.isin(["Limited", "Unstable"]).sum())
+    pct_limited_unstable = round(100 * n_limited_unstable / n_total) if n_total else 0
+
+    prog_col = df.get("programming_confidence", pd.Series(dtype=float))
+    n_low_prog = int((prog_col <= 2).sum()) if not prog_col.empty else 0
+    pct_low_prog = round(100 * n_low_prog / n_total) if n_total else 0
+
+    # Top 2 stated support needs
+    need_col = df.get("support_need", pd.Series(dtype=str)).fillna("")
+    need_counts = (
+        need_col[need_col.isin(["None right now", "Unsure", ""]) == False]
+        .value_counts()
+        .head(2)
+    )
+    top_needs_text = " and ".join(
+        [f"{cat.lower()} ({n} learners)" for cat, n in need_counts.items()]
+    ) if len(need_counts) else "none stated in this view"
+
+    # Average AI confidence vs digital confidence (sample-size honest)
+    ai_col = df.get("ai_confidence", pd.Series(dtype=float))
+    dig_col = df.get("digital_confidence", pd.Series(dtype=float))
+    ai_avg = ai_col.dropna().mean() if not ai_col.empty else None
+    dig_avg = dig_col.dropna().mean() if not dig_col.empty else None
+
+    # ----- build the insights list dynamically -----
+    insights = []
+
+    if n_high_risk > 0:
+        insights.append(
+            f"{n_high_risk} of {n_total} learners ({pct_high}%) are flagged as **High** "
+            f"attendance risk and need proactive contact in week 1."
+        )
+
+    if n_phone_only > 0:
+        insights.append(
+            f"{n_phone_only} learners ({pct_phone_only}%) rely on a phone only — "
+            f"a resource constraint, not a measure of capability or commitment."
+        )
+
+    if n_limited_unstable > 0:
+        insights.append(
+            f"{n_limited_unstable} learners ({pct_limited_unstable}%) report limited or unstable "
+            f"internet — a key driver of disengagement in live sessions."
+        )
+
+    if n_low_prog > 0:
+        insights.append(
+            f"{n_low_prog} learners ({pct_low_prog}%) rate their programming confidence at 2 or below, "
+            f"signalling demand for foundational scaffolding."
+        )
+
+    if len(need_counts):
+        insights.append(f"Most-requested support categories: {top_needs_text}.")
+
+    if ai_avg is not None and dig_avg is not None and not pd.isna(ai_avg) and not pd.isna(dig_avg):
+        gap = dig_avg - ai_avg
+        if gap > 0.2:
+            insights.append(
+                f"Average AI confidence ({ai_avg:.1f}/5) is lower than average digital "
+                f"confidence ({dig_avg:.1f}/5) — AI-specific onboarding would close the gap."
+            )
+
+    # ----- build the recommendations list dynamically -----
+    recommendations = []
+
+    if n_high_risk > 0:
+        recommendations.append(
+            f"Assign a mentor and a check-in schedule to the {n_high_risk} high-risk "
+            f"learner{'s' if n_high_risk != 1 else ''} within week 1 — record the action in the Learner Detail page."
+        )
+
+    if n_limited_unstable > 0:
+        recommendations.append(
+            f"Provide offline / downloadable materials and consider data stipends for the "
+            f"{n_limited_unstable} learner{'s' if n_limited_unstable != 1 else ''} with connectivity constraints."
+        )
+
+    if n_phone_only > 0:
+        recommendations.append(
+            f"Set up a device-loan scheme or on-site lab access for the {n_phone_only} "
+            f"phone-only learner{'s' if n_phone_only != 1 else ''} so they can complete practical work."
+        )
+
+    if n_low_prog > 0:
+        recommendations.append(
+            f"Run an optional 'foundations' programming track for the {n_low_prog} "
+            f"learner{'s' if n_low_prog != 1 else ''} with low programming confidence before advancing to AI topics."
+        )
+
+    # Always include the accountability recommendation if there is anything to do
+    if recommendations:
+        recommendations.append(
+            "Record every action taken against each learner on the Learner Detail page — "
+            "creates the audit trail the tool's design depends on."
+        )
+
+    # ----- render the two panels side by side -----
+    st.markdown("---")
+    st.markdown("### Insights and recommendations from this view")
+    st.caption("Computed live from the current filtered set. Changes when filters change.")
+
+    col_left, col_right = st.columns(2)
+
+    with col_left:
+        st.markdown("#### Key insights")
+        if insights:
+            for i, insight in enumerate(insights, start=1):
+                st.markdown(f"**{i}.** {insight}")
+        else:
+            st.info("No insights to surface for this filtered view.")
+
+    with col_right:
+        st.markdown("#### Recommendations for programme staff")
+        if recommendations:
+            for i, rec in enumerate(recommendations, start=1):
+                st.markdown(f"**{i}.** {rec}")
+        else:
+            st.info("No recommendations needed for this filtered view.")
+
 
 # ====== EXPORT — download the data currently in view ======
 # Exports the filtered subset (respects slicer state). By default we exclude
@@ -545,6 +694,10 @@ with row3_col2:
     fig.update_layout(height=380, margin=dict(l=10, r=10, t=30, b=10),
                       title="Digital confidence band distribution", showlegend=False)
     st.plotly_chart(fig, use_container_width=True)
+
+
+# ====== INSIGHTS & RECOMMENDATIONS PANELS ======
+render_insights_and_recommendations_panels(df)
 
 
 # ====== FOOTER ======
